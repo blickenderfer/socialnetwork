@@ -1,24 +1,32 @@
-import mongoose from "mongoose";
-const { Schema, model } = mongoose; 
+const { Schema, model } = require("mongoose"); 
 
 const thoughtSchema = new Schema({
     thoughtText: {
-        type: DataTypes.STRING,
-        /*required*/
-        /*must be between 1 and 128 characters*/
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 128
     },
     createdAt: {
-        /*date,
-        set default value to current timestamp,
-        use a getter method to format the timestamp on query*/
+        type: Date,
+        default: Date.now,
+        get: (date)=>date.toLocaleDateString()
     },
     username: {
-        type: DataTypes.STRING,
-        /*allowNull: false, I'm assuming*/
+        type: String,
+        required: true
     },
-    reactions: {
-        reactionId: {
-            
-        }
+    reactions: [reactionSchema]
+},{
+    toJSON: {
+        virtuals: true,
+        getters: true
     }
 })
+
+thoughtSchema.virtual("reactionCount").get(function(){
+    return this.reactions.length
+})
+
+const Thought = model("thought", thoughtSchema)
+module.exports = Thought
