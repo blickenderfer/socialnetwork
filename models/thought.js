@@ -37,12 +37,9 @@ const thoughtSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    username: {
-        type: String,
-        required: true
-    },
     userId: {
-        type: SchemaTypes.ObjectId
+        type: SchemaTypes.ObjectId,
+        ref: "User"
     },
     reactions: [{type: reactionSchema}]
 })
