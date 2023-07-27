@@ -1,6 +1,7 @@
-import user from "../models/User"
+import User from "../models/User.js"
 
 export const findUsers = async (req, res) => {
+    console.log("FJIEHFUERQH")
     try {
         const users = await User.find()
         res.json(users)

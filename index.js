@@ -1,13 +1,13 @@
 import express from "express"
 import mongoose from "mongoose"
-import controllers from "./controllers/index.js"
 import connectToDb from "./config/connection.js";
+import routeIndex from "./routes/index.js"
 const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(controllers);
+app.use(routeIndex);
 
 connectToDb()
 

@@ -1,4 +1,7 @@
-import Thought from "../models/Thought"
+import Thought from "../models/Thought.js"
+import User from "../models/User.js"
+import express from "express"
+const router = express.Router()
 
 export const findThoughts = async (req, res) => {
     try {
@@ -27,10 +30,10 @@ export const updateThought = async (req, res) => {
     let keys = Object.keys(req.body)
     try {
         const thought = await Thought.findById(req.params.id)
-    if(!user){
+    if(!thought){
         return res.status(404).json({message: "Thought not found"})
     }
-    keys.forEach(key => user[key] = req.body[key])
+    keys.forEach(key => thought[key] = req.body[key])
     const updatedThought = await thought.save()
     res.json(updatedThought)
     } catch (error) {
@@ -39,9 +42,14 @@ export const updateThought = async (req, res) => {
     }
 }
 
-const createThought = async (req, res) => {
+export const createThought = async (req, res) => {
     try {
-        const thought = await Thought.create({username: req.body.username, email: req.body.email})
+        const user = await User.findById(req.params.userId)
+        if (!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+        const thought = await Thought.create({thoughtText: req.body.thoughtText, username: user.username, userId: req.params.userId})
+        user.thoughts.push(thought._id)
         res.json(thought)
     } catch (error) {
         console.error("Error creating thought", error)
@@ -49,15 +57,18 @@ const createThought = async (req, res) => {
     }
 }
 
-const deleteThought = async (req, res) => {
+export const deleteThought = async (req, res) => {
     try {
         const thought = await Thought.findById(req.params.id)
-        await Promise.all(user.thoughts.map(thoughtId => Thought.deleteOne({_id:thoughtId})))
-        const deletion = await User.deleteOne({_id: req.params.id})
+        const user = await User.findOne({username:thought.username})
+        const deletion = await Thought.deleteOne({_id: req.params.id})
         if(!deletion){
             return res.status(404).json({message: "Thought not found"})
         }
-        res.json({message: "Thought deleted"})
+        const newThoughts = user.thoughts.filter(th => th._id != req.params.id)
+        user.thoughts = newThoughts
+        await user.save()
+        res.json(user)
     } catch (error) {
         console.error("Error deleting thought", error)
         res.status(500).json({message: "server error"})

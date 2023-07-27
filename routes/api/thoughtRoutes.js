@@ -10,7 +10,7 @@ router.get("/:id", findSingleThought)
 
 router.put("/:id", updateThought)
 
-router.post("/", createThought)
+router.post("/:userId", createThought)
 
 router.delete("/:id", deleteThought)
 
