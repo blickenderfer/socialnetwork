@@ -1,7 +1,5 @@
 import express from "express"
-import thoughtRoutes from "./api/thoughtRoutes.js"
-import userRoutes from "./api/userRoutes.js"
+import api from "./api/index.js"
 const router = express.Router()
-router.use("/api/users", userRoutes)
-router.use("/api/thoughts", thoughtRoutes)
+router.use("/api", api)
 export default router

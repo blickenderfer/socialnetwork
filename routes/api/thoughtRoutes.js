@@ -1,17 +1,10 @@
-import Thought from "../../models/Thought.js"
-import User from "../../models/User.js"
 import express from "express"
 import {findSingleThought, findThoughts, updateThought, createThought, deleteThought} from "../../controllers/thoughtController.js"
 const router = express.Router()
 
-router.get("/", findThoughts)
+router.route("/").get(findThoughts).post(createThought)
 
-router.get("/:id", findSingleThought)
+router.route("/:id").get(findSingleThought).put(updateThought).delete(deleteThought)
 
-router.put("/:id", updateThought)
-
-router.post("/:userId", createThought)
-
-router.delete("/:id", deleteThought)
 
 export default router

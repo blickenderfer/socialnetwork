@@ -1,4 +1,12 @@
-// import models
+import Thought from "../models/Thought.js"
+import User from "../models/User.js"
+import connectToDb from "../config/connection.js"
+
+connectToDb.on('error', (err) => err)
+connectToDb.once('open', async () => {
+    console.log('connected')
+    seedData()
+})    
 
 const users = [
     /*objects with username and email*/
