@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-const {Schema, SchemaTypes, model} = mongoose
+const {Schema, model } = mongoose
 
 const userSchema = new Schema({
     username: {
@@ -21,13 +21,18 @@ const userSchema = new Schema({
         }
     },
     thoughts: [{
-        type: SchemaTypes.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Thought"
     }],
     friends: [{
-        type: SchemaTypes.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User"
     }]
+},{
+    toJSON:{
+        virtuals: true
+    },
+    _id: false
 }) 
 
 userSchema.virtual("friendCount").get(function(){

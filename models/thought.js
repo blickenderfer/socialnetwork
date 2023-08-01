@@ -1,9 +1,9 @@
 import mongoose from "mongoose"
-const { Schema, SchemaTypes, model } = mongoose
+const { Schema, model } = mongoose
 
 const reactionSchema = new Schema({
     reactionId: {
-        type: SchemaTypes.ObjectId,
+        type: Schema.Types.ObjectId,
         default: () => new mongoose.Types.ObjectId()
     },
     reactionBody: {
@@ -38,10 +38,16 @@ const thoughtSchema = new Schema({
         default: Date.now,
     },
     userId: {
-        type: SchemaTypes.ObjectId,
-        ref: "User"
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     reactions: [{type: reactionSchema}]
+},{
+    toJSON:{
+        virtuals: true
+    },
+    _id: false
 })
 
 thoughtSchema.virtual("reactionCount").get(function () {
