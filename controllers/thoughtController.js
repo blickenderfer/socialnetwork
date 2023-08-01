@@ -43,12 +43,13 @@ export const updateThought = async (req, res) => {
 }
 
 export const createThought = async (req, res) => {
+    console.log(req.body.userId)
     try {
-        const user = await User.findById(req.params.userId)
+        const user = await User.findById(req.body.userId)
         if (!user) {
             return res.status(404).json({message: "User not found"})
         }
-        const thought = await Thought.create({thoughtText: req.body.thoughtText, username: user.username, userId: req.params.userId})
+        const thought = await Thought.create({thoughtText: req.body.thoughtText, username: user.username, userId: req.body.userId})
         user.thoughts.push(thought._id)
         res.json(thought)
     } catch (error) {
