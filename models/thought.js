@@ -42,8 +42,15 @@ const thoughtSchema = new Schema({
         ref: "User",
         required: true
     },
-    reactions: [{type: reactionSchema}]
-})
+    reactions: [reactionSchema]
+},
+    {
+        toJSON: {
+            virtuals:true,
+            getters:true
+        }
+    }
+)
 
 thoughtSchema.virtual("reactionCount").get(function () {
     return this.reactions.length
